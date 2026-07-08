@@ -1,6 +1,10 @@
 from __future__ import annotations
 
 import argparse
+import tempfile
+from pathlib import Path
+
+import yaml
 
 
 def parse_args() -> argparse.Namespace:
@@ -17,6 +21,32 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def resolve_data_yaml(data: str) -> str:
+    data_path = Path(data)
+    if not data_path.exists() or data_path.suffix.lower() not in {".yaml", ".yml"}:
+        return data
+
+    raw = yaml.safe_load(data_path.read_text(encoding="utf-8")) or {}
+    if not isinstance(raw, dict):
+        return data
+
+    root = Path(raw.get("path") or data_path.parent)
+    if not root.is_absolute():
+        root = (data_path.parent / root).resolve()
+    raw["path"] = root.as_posix()
+
+    temp = tempfile.NamedTemporaryFile(
+        mode="w",
+        encoding="utf-8",
+        suffix=".yaml",
+        prefix="robot_yolo_",
+        delete=False,
+    )
+    with temp:
+        yaml.safe_dump(raw, temp, allow_unicode=True, sort_keys=False)
+    return temp.name
+
+
 def main() -> None:
     args = parse_args()
     try:
@@ -26,7 +56,7 @@ def main() -> None:
 
     model = YOLO(args.weights, task=args.task)
     model.train(
-        data=args.data,
+        data=resolve_data_yaml(args.data),
         epochs=args.epochs,
         imgsz=args.imgsz,
         batch=args.batch,
@@ -53,4 +83,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

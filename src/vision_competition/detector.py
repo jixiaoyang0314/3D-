@@ -7,6 +7,31 @@ import numpy as np
 from .types import Detection
 
 
+OFFICIAL_CLASS_ALIASES = {
+    "banana": "CD003",
+    "bb_0": "CB004",
+    "bb_1": "CC004",
+    "bb_2": "CC003",
+    "bb_3": "CB003",
+    "cup": "CA003",
+    "new_0": "CB002",
+    "new_1": "CB003",
+    "new_2": "CC003",
+    "part_0": "CA002",
+    "part_1": "CC002",
+    "part_2": "CC004",
+    "part_3": "CB004",
+    "part_4": "CB002",
+    "part_5": "CB003",
+    "part_6": "CC001",
+    "part_7": "CC003",
+    "pinzi": "CC004",
+    "shupian+huotuichang_0": "CB003",
+    "shupian+huotuichang_1": "CB004",
+    "yijia": "CA004",
+}
+
+
 class YOLODetector:
     def __init__(
         self,
@@ -55,7 +80,8 @@ class YOLODetector:
         cls_ids = boxes.cls.cpu().numpy().astype(int)
 
         for i, (box, score, cls_id) in enumerate(zip(xyxy, confs, cls_ids, strict=False)):
-            class_name = str(self.names.get(int(cls_id), cls_id))
+            raw_class_name = str(self.names.get(int(cls_id), cls_id))
+            class_name = OFFICIAL_CLASS_ALIASES.get(raw_class_name, raw_class_name)
             mask = masks[i] if masks is not None and i < len(masks) else None
             detections.append(
                 Detection(
@@ -68,4 +94,3 @@ class YOLODetector:
                 )
             )
         return detections
-
