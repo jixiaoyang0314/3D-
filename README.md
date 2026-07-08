@@ -26,6 +26,25 @@ Train YOLO with your own dataset:
 python train_yolo.py --data configs/data.example.yaml --weights yolo11s.pt --epochs 200 --imgsz 1280
 ```
 
+For the local dataset layout used on this machine, first prepare a standard YOLO
+dataset:
+
+```bash
+python prepare_dataset.py --source "D:/robot_contest_data/data" --output "D:/robot_contest_data/yolo_dataset"
+```
+
+On this Windows machine the actual prepared dataset is:
+
+```text
+D:\机器人识别大赛\yolo_dataset\data.yaml
+```
+
+Then train with that generated yaml:
+
+```bash
+python train_yolo.py --data "D:\机器人识别大赛\yolo_dataset\data.yaml" --weights yolo11s.pt --epochs 200 --imgsz 1280
+```
+
 Run a replay directory:
 
 ```bash
@@ -104,4 +123,3 @@ The output layer is intentionally conservative:
 - Over-counting can lose a class score, so count selection maximizes expected contest score.
 - Picture-like flat depth regions are heavily penalized.
 - Unknown objects are reported only when OCR voting maps text to a known `Wxxx` ID.
-

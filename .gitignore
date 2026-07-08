@@ -28,6 +28,7 @@ weights/
 datasets/
 dataset/
 data/
+yolo_dataset/
 replay/
 runs/
 smoke_result/

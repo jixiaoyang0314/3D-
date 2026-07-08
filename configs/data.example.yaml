@@ -1,23 +1,6 @@
-path: /absolute/path/to/your/dataset
+path: /absolute/path/to/yolo_dataset
 train: images/train
 val: images/val
 
 names:
-  0: CA001
-  1: CA002
-  2: CA003
-  3: CA004
-  4: CB001
-  5: CB002
-  6: CB003
-  7: CB004
-  8: CC001
-  9: CC002
-  10: CC003
-  11: CC004
-  12: CD001
-  13: CD002
-  14: CD003
-  15: CD004
-  16: W000
-
+  0: replace_with_dataset_class_0
