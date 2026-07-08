@@ -1,0 +1,45 @@
+# Python cache and local environments
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+
+# Model weights and deployment artifacts
+*.pt
+*.pth
+*.onnx
+*.engine
+*.rknn
+*.om
+*.bin
+weights/
+
+# Datasets, replay inputs, and generated outputs
+datasets/
+dataset/
+data/
+replay/
+runs/
+smoke_result/
+result/
+
+# Large sensor dumps
+*.npy
+*.npz
+*.bag
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

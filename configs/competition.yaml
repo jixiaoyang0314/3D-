@@ -1,0 +1,83 @@
+competition:
+  team_prefix: YOUR_UNIV
+  team_name: YOUR_TEAM
+  round_id: 1
+  result_dir: ~/Desktop/result
+
+models:
+  yolo_weights: weights/best.pt
+  classifier_weights:
+  classifier_enabled: false
+  classifier_min_confidence: 0.70
+  classifier_weight: 0.35
+  # 只复核易混类别；留空表示二级分类器对所有类别都可生效。
+  classifier_groups:
+    - [CD001, CD002, CD004]
+    - [CC002, CC004]
+    - [CB001, CB004, CC003]
+  ocr_enabled: false
+
+runtime:
+  device: cpu
+  imgsz: 1280
+  frame_count: 24
+  warmup_frames: 2
+  max_runtime_sec: 55.0
+  conf_floor: 0.12
+  yolo_iou: 0.60
+  stable_min_frames: 3
+  high_conf: 0.78
+  output_min_expected_score: 0.35
+  # 可由 optimize_thresholds.py 从验证集学习得到。
+  class_thresholds: {}
+  class_min_expected_scores: {}
+  max_count_per_id: 5
+  max_crops_per_instance: 6
+  use_3d_fusion: true
+  max_3d_match_distance_m: 0.12
+  table_count: 1
+
+camera:
+  source: replay
+  rgb_index: 0
+  replay_dir: replay
+  # 如果没有手动配置 ROI，table_count=3 时会按图像横向三等分粗分 Table。
+  # ROI 格式为 [x1, y1, x2, y2]，像素坐标。
+  table_rois: []
+  # Astra Pro Plus 标定后填写；为空时使用图像尺寸估算，仅用于调试。
+  fx:
+  fy:
+  cx:
+  cy:
+
+depth:
+  enabled: true
+  object_closer_to_camera: true
+  table_depth_percentile: 75
+  ransac_plane_enabled: true
+  plane_max_points: 2500
+  plane_iterations: 80
+  plane_threshold_m: 0.012
+  point_sample_stride: 3
+  min_valid_ratio: 0.18
+  min_object_points: 24
+  picture_height_m: 0.018
+  picture_thickness_m: 0.012
+  picture_penalty: 0.05
+  depth_bonus: 0.06
+
+ocr:
+  min_confidence: 0.82
+  vote_min_count: 1
+  use_preprocess_variants: true
+  rotate_angles: [0, 90, 180, 270]
+  keyword_map: {}
+  # 示例：
+  # keyword_map:
+  #   W001: ["高等数学", "数学", "calculus"]
+
+judge:
+  enabled: false
+  host: 127.0.0.1
+  port: 9000
+  timeout_sec: 1.0
