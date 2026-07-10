@@ -32,6 +32,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--round", type=int)
     parser.add_argument("--weights", help="Override YOLO weights in the config.")
     parser.add_argument("--device", help="Override runtime device, for example 0, cpu, or cuda:0.")
+    parser.add_argument("--imgsz", type=int, help="Override YOLO inference image size.")
     parser.add_argument("--result-dir", help="Override result directory in the config.")
     parser.add_argument("--frame-count", type=int, help="Override number of frames to process.")
     parser.add_argument("--warmup-frames", type=int, help="Override number of warmup frames to skip.")
@@ -54,6 +55,8 @@ def apply_cli_overrides(config_path: str, args: argparse.Namespace):
         config.models.yolo_weights = args.weights
     if args.device:
         config.runtime.device = args.device
+    if args.imgsz is not None:
+        config.runtime.imgsz = args.imgsz
     if args.result_dir:
         config.competition.result_dir = args.result_dir
     if args.frame_count is not None:
@@ -88,11 +91,22 @@ def main() -> None:
     judge.start()
 
     detector = YOLODetector(
-        weights=config.models.yolo_weights,
+        weights=config.models.yolo_weights_ensemble or config.models.yolo_weights,
         device=config.runtime.device,
         imgsz=config.runtime.imgsz,
         conf=config.runtime.conf_floor,
         iou=config.runtime.yolo_iou,
+        multiscale_imgsz=config.runtime.multiscale_imgsz,
+        wbf_iou=config.runtime.wbf_iou,
+        refine_enabled=config.runtime.small_object_refine_enabled,
+        refine_classes=config.runtime.small_object_refine_classes,
+        refine_area_ratio=config.runtime.small_object_refine_area_ratio,
+        refine_max_detections=config.runtime.small_object_refine_max_detections,
+        refine_crop_scale=config.runtime.small_object_refine_crop_scale,
+        refine_min_crop_side=config.runtime.small_object_refine_min_crop_side,
+        refine_imgsz=config.runtime.small_object_refine_imgsz,
+        refine_conf=config.runtime.small_object_refine_conf,
+        refine_match_iou=config.runtime.small_object_refine_match_iou,
     )
     camera = create_camera(config.camera)
     depth = DepthAnalyzer(config.depth, config.camera, config.runtime)

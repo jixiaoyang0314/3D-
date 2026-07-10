@@ -6,6 +6,7 @@ competition:
 
 models:
   yolo_weights: weights/best.pt
+  yolo_weights_ensemble: []
   classifier_weights:
   classifier_enabled: false
   classifier_min_confidence: 0.70
@@ -18,8 +19,21 @@ models:
   ocr_enabled: false
 
 runtime:
-  device: cpu
-  imgsz: 1280
+  device: 0
+  imgsz: 704
+  # Multi-scale inference uses weighted boxes fusion; 640/704 is the best region for the current YOLO11m best.pt.
+  multiscale_imgsz: [640, 704]
+  wbf_iou: 0.55
+  # Refine only existing weak/small detections with a local crop pass, without adding new objects.
+  small_object_refine_enabled: true
+  small_object_refine_classes: [CA002, CB002, CB003, CC001, CC003]
+  small_object_refine_area_ratio: 0.04
+  small_object_refine_max_detections: 8
+  small_object_refine_crop_scale: 3.0
+  small_object_refine_min_crop_side: 320
+  small_object_refine_imgsz: 704
+  small_object_refine_conf: 0.08
+  small_object_refine_match_iou: 0.12
   frame_count: 24
   warmup_frames: 2
   max_runtime_sec: 55.0

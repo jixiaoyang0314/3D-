@@ -18,6 +18,7 @@ class CompetitionConfig:
 @dataclass(slots=True)
 class ModelConfig:
     yolo_weights: str = "weights/best.pt"
+    yolo_weights_ensemble: list[str] = field(default_factory=list)
     classifier_weights: str | None = None
     classifier_enabled: bool = False
     classifier_min_confidence: float = 0.70
@@ -30,6 +31,17 @@ class ModelConfig:
 class RuntimeConfig:
     device: str = "cpu"
     imgsz: int = 1280
+    multiscale_imgsz: list[int] = field(default_factory=list)
+    wbf_iou: float = 0.55
+    small_object_refine_enabled: bool = False
+    small_object_refine_classes: list[str] = field(default_factory=list)
+    small_object_refine_area_ratio: float = 0.04
+    small_object_refine_max_detections: int = 8
+    small_object_refine_crop_scale: float = 3.0
+    small_object_refine_min_crop_side: int = 320
+    small_object_refine_imgsz: int = 704
+    small_object_refine_conf: float = 0.08
+    small_object_refine_match_iou: float = 0.12
     frame_count: int = 24
     warmup_frames: int = 2
     max_runtime_sec: float = 55.0

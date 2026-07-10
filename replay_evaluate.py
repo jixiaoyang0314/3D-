@@ -13,6 +13,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--truth", required=True)
     parser.add_argument("--weights")
     parser.add_argument("--device", help="Override runtime device, for example 0, cpu, or cuda:0.")
+    parser.add_argument("--imgsz", type=int, help="Override YOLO inference image size.")
     parser.add_argument("--result-dir", default="runs/replay_result")
     parser.add_argument("--session-dir", default="runs/replay_session")
     parser.add_argument("--frame-count", type=int)
@@ -44,6 +45,8 @@ def main() -> None:
         command.extend(["--weights", args.weights])
     if args.device:
         command.extend(["--device", args.device])
+    if args.imgsz is not None:
+        command.extend(["--imgsz", str(args.imgsz)])
     if args.frame_count is not None:
         command.extend(["--frame-count", str(args.frame_count)])
     if args.warmup_frames is not None:
