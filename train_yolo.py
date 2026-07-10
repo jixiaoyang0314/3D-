@@ -25,6 +25,26 @@ TRAINING_PRESETS = {
         "shear": 4.0,
         "perspective": 0.0008,
         "fliplr": 0.5,
+        "multi_scale": 0.0,
+    },
+    "moderate": {
+        "patience": 35,
+        "workers": 8,
+        "seed": 20260708,
+        "mosaic": 0.5,
+        "close_mosaic": 20,
+        "mixup": 0.0,
+        "copy_paste": 0.0,
+        "hsv_h": 0.015,
+        "hsv_s": 0.35,
+        "hsv_v": 0.25,
+        "degrees": 15.0,
+        "translate": 0.10,
+        "scale": 0.35,
+        "shear": 2.0,
+        "perspective": 0.0003,
+        "fliplr": 0.5,
+        "multi_scale": 0.10,
     },
     "precision": {
         "patience": 60,
@@ -43,6 +63,7 @@ TRAINING_PRESETS = {
         "shear": 2.0,
         "perspective": 0.0003,
         "fliplr": 0.5,
+        "multi_scale": 0.0,
     },
     "fine_tune": {
         "patience": 30,
@@ -61,6 +82,7 @@ TRAINING_PRESETS = {
         "shear": 1.0,
         "perspective": 0.0001,
         "fliplr": 0.3,
+        "multi_scale": 0.0,
     },
 }
 
@@ -94,6 +116,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--box", type=float, help="Box loss gain.")
     parser.add_argument("--cls", type=float, help="Class loss gain.")
     parser.add_argument("--dfl", type=float, help="DFL loss gain.")
+    parser.add_argument("--cls-pw", type=float, help="Inverse-frequency class weighting power.")
+    parser.add_argument("--multi-scale", type=float, help="Per-batch image-size variation fraction.")
+    parser.add_argument("--distill-model", help="Teacher checkpoint used for knowledge distillation.")
+    parser.add_argument("--distill-weight", dest="dis", type=float, help="Knowledge-distillation loss weight.")
     parser.add_argument("--rect", action="store_true", help="Use rectangular training batches.")
     parser.add_argument("--cache", choices=["ram", "disk"], help="Cache images for faster training.")
     parser.add_argument("--mosaic", type=float)
@@ -171,6 +197,7 @@ def main() -> None:
         "lrf": args.lrf,
         "weight_decay": args.weight_decay,
         "warmup_epochs": args.warmup_epochs,
+        "multi_scale": args.multi_scale,
         "rect": args.rect,
         "close_mosaic": args.close_mosaic,
         "cos_lr": True,
@@ -199,6 +226,12 @@ def main() -> None:
         train_kwargs["cls"] = args.cls
     if args.dfl is not None:
         train_kwargs["dfl"] = args.dfl
+    if args.cls_pw is not None:
+        train_kwargs["cls_pw"] = args.cls_pw
+    if args.distill_model is not None:
+        train_kwargs["distill_model"] = args.distill_model
+    if args.dis is not None:
+        train_kwargs["dis"] = args.dis
 
     model.train(**train_kwargs)
 

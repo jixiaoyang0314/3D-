@@ -21,7 +21,7 @@ models:
 runtime:
   device: 0
   imgsz: 704
-  # Multi-scale inference uses weighted boxes fusion; 640/704 is the best region for the current YOLO11m best.pt.
+  # Multi-scale inference uses weighted boxes fusion around the selected model's 704-pixel validation optimum.
   multiscale_imgsz: [640, 704]
   wbf_iou: 0.55
   # Refine only existing weak/small detections with a local crop pass, without adding new objects.

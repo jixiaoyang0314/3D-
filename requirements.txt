@@ -1,5 +1,5 @@
 numpy>=1.26
 opencv-python>=4.8
+psutil>=5.9
 PyYAML>=6.0
 ultralytics>=8.3.0
-

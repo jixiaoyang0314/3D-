@@ -33,6 +33,7 @@ replay/
 runs/
 smoke_result/
 result/
+fusion_result.json
 
 # Large sensor dumps
 *.npy

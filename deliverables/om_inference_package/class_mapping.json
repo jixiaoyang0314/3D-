@@ -1,0 +1,13 @@
+[
+  {"class_id": 0, "official_id": "CA002", "name_cn": "耳机"},
+  {"class_id": 1, "official_id": "CA003", "name_cn": "水杯"},
+  {"class_id": 2, "official_id": "CA004", "name_cn": "衣架"},
+  {"class_id": 3, "official_id": "CB002", "name_cn": "瓜子"},
+  {"class_id": 4, "official_id": "CB003", "name_cn": "火腿肠"},
+  {"class_id": 5, "official_id": "CB004", "name_cn": "薯片"},
+  {"class_id": 6, "official_id": "CC001", "name_cn": "罐装饮料"},
+  {"class_id": 7, "official_id": "CC002", "name_cn": "瓶装饮料"},
+  {"class_id": 8, "official_id": "CC003", "name_cn": "盒装牛奶"},
+  {"class_id": 9, "official_id": "CC004", "name_cn": "瓶装饮用水"},
+  {"class_id": 10, "official_id": "CD003", "name_cn": "香蕉"}
+]
